@@ -1,6 +1,6 @@
 from app.api import bp
 from flask import jsonify
-from app.models import Conversation,Anonyuser
+from app.models import Conversation,Anonyuser,User
 from app.api.errors import bad_request
 
 
@@ -13,6 +13,20 @@ def hospital_info_for_anony(user_id):
     if '_links' in user_info:
         user_info.pop('_links')
     user_info['username'] = 'Anonymous'
+    
+    hospital_info.update(user_info)
+    return jsonify(hospital_info)
+
+
+@bp.route('/user/<int:id>/hospital',methods=['GET'])
+def hospital_info_for_user(id):
+    hospital_info = Conversation.query.filter_by(user_id=id).first().to_hospital_dict()
+    if hospital_info is None:
+        return jsonify({'message':None})
+    user_info = User.query.get_or_404(id).to_dict()
+    if '_links' in user_info:
+        user_info.pop('_links')
+    #user_info['username'] = 'Anonymous
     
     hospital_info.update(user_info)
     return jsonify(hospital_info)

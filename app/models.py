@@ -13,6 +13,12 @@ import google.generativeai as genai
 
 model = genai.GenerativeModel('gemini-pro')
 
+class Age_Class(enum.Enum):
+    baby = 'Baby',
+    child = 'Child'
+    adult = 'Adult'
+    old = 'Old'
+
 class Gender(enum.Enum):
     male = 'Male'
     female = 'Female'
@@ -49,6 +55,7 @@ class PaginatedAPIMixin(object):
                 'self':url_for(endpoint,page=page,per_page=per_page,**kwargs),
                 'prev':url_for(endpoint,page=page-1,per_page=per_page,**kwargs) if resources.has_prev else None,
                 'next':url_for(endpoint,page=page+1,per_page=per_page,**kwargs) if resources.has_next else None,
+                'create_anony':url_for('api.create_anony_user')
             }
         }
         return data
@@ -68,6 +75,8 @@ class User(UserMixin,db.Model):
     medical_history = db.Column(db.Text)
     conversations = db.Relationship('Conversation',backref = 'user')
     
+
+
     
     def __repr__(self):
         return f'<User : {self.username}, Email : {self.email}>'
@@ -89,8 +98,8 @@ class User(UserMixin,db.Model):
     def to_dict(self):
         data = {
             'id' : self.id,
-            'first_name':self.firstname,
-            'last_name': self.lastname,
+            'firstname':self.firstname,
+            'lastname': self.lastname,
             'username':self.username,
             'email':self.email,
             'gender':self.gender.value if self.gender else None,
@@ -104,8 +113,8 @@ class User(UserMixin,db.Model):
         }
         return data
     def from_dict(self,data,new_user=False):
-        for field in ['first_name','last_name','username','email','gender','date_of_birth','bloodgroup','genotype','medical_history']:
-            if field in data:
+        for field in ['firstname','lastname','username','email','gender','date_of_birth','bloodgroup','genotype','medical_history']:
+            if field in data and field != 'date_of_birth':
                 setattr(self,field,data[field])
             if field == 'date_of_birth':
                 date = eval(data['date_of_birth'])
@@ -115,7 +124,7 @@ class User(UserMixin,db.Model):
 
 class Anonyuser(UserMixin,db.Model):
     username = db.Column(db.String(50),primary_key=True)
-    date_of_birth = db.Column(db.Date)
+    age = db.Column(db.Enum(Age_Class))
     gender = db.Column(db.Enum(Gender))
     date_created = db.Column(db.Date,default=datetime.now)
     bloodgroup = db.Column(db.Enum(BloodGroup))
@@ -131,7 +140,7 @@ class Anonyuser(UserMixin,db.Model):
         data = {
             'username':self.username,
             'Gender':self.gender.value if self.gender else None,
-            'Age':relativedelta(datetime.now(),self.date_of_birth).years,
+            'Age':self.age.value if self.age else None,
             'bloodgroup':self.bloodgroup.value if self.bloodgroup else None,
             'genotype':self.genotype.value if self.genotype else None,
             'medical_history':self.medical_history,
@@ -142,12 +151,9 @@ class Anonyuser(UserMixin,db.Model):
         return data
     def from_dict(self,user_id,data=None):
         self.username = user_id
-        for field in ['bloodgroup','genotype','medical_history','gender','date_of_birth']:
-            if field in data and field != 'date_of_birth':
+        for field in ['bloodgroup','genotype','medical_history','gender','age']:
+            if field in data :
                 setattr(self,field,data[field])
-            if field == 'date_of_birth':
-                date = eval(data['date_of_birth'])
-                self.date_of_birth = datetime(date[0],date[1],date[2])
 
 
             
@@ -179,13 +185,13 @@ class Conversation(PaginatedAPIMixin,db.Model):
             'message':json.loads(self.message)[2:],
             'length': self.check_length(),
             '_links':{'youtube_link':self.youtube_link,
-                      'hospital_link':url_for('api.hospital_info_for_anony',user_id=self.anony_user_id)}
+                      'hospital_link':url_for('api.hospital_info_for_user',id=self.user_id)}
 
         }
         return data
    
 
-    def from_dict(self,user_id,conversation_no=None,new_chat=False,data=None,anony=False):
+    def from_dict(self,user_id,username,conversation_no=None,new_chat=False,data=None,anony=False):
         if new_chat:
             message = chat()
             self.created_at = datetime.now()
@@ -198,7 +204,7 @@ class Conversation(PaginatedAPIMixin,db.Model):
             else:
                 self.user_id = user_id
                 self.conversation_no = conversation_no
-                self.title = f"{user_id}'s chat_{conversation_no}"
+                self.title = f"{username}'s chat_{conversation_no}"
         if not new_chat:
             #CChatBot message 
             message = chat(history=json.loads(self.message))
@@ -241,12 +247,13 @@ class Conversation(PaginatedAPIMixin,db.Model):
         return model.count_tokens(json.loads(self.message)).total_tokens
     def to_hospital_dict(self):
         print(self.info_hospital)
-        info = eval(self.info_hospital)
-        if info['Situation'] == 'non medical related condition':
-            return None
-        if 'FirstAid_searchwords' in info:
-            info.pop('FirstAid_searchwords')
-        return info
+        if self.info_hospital:
+            info = eval(self.info_hospital)
+            if info['Situation'] == 'non medical related condition':
+                return None
+            if 'FirstAid_searchwords' in info:
+                info.pop('FirstAid_searchwords')
+            return info
 
 
 @login.user_loader

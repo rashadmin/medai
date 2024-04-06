@@ -1,7 +1,7 @@
 from werkzeug.http import HTTP_STATUS_CODES 
 from app.api import bp
 from werkzeug.exceptions import HTTPException
-
+from app import db
 def error_response(status_code,message=None):
     payload = {'error':HTTP_STATUS_CODES.get(status_code,'unknown_error')}
     if message:
@@ -16,4 +16,9 @@ def bad_request(message):
 @bp.errorhandler(HTTPException)
 def handle_exception(e):
     return error_response(e.code)
+
+@bp.app_errorhandler(500)
+def internal_error(error):
+    db.session.rollback()
+
 
