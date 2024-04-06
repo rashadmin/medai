@@ -1,0 +1,2 @@
+FLASK_APP=medic_ai.py
+FLASK_DEBUG=1
