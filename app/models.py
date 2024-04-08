@@ -1,6 +1,6 @@
 from app import db,login
 from dateutil.relativedelta import relativedelta
-from datetime import datetime
+from datetime import datetime,timedelta
 from werkzeug.security import generate_password_hash,check_password_hash 
 from flask_login import UserMixin
 import enum
@@ -8,8 +8,11 @@ from app.chat.chat import chat,Information
 from app.videos.video_functions import return_url
 from json.decoder import JSONDecodeError
 from flask import url_for
+import os
+import secrets
 import json
 import google.generativeai as genai
+import base64
 
 model = genai.GenerativeModel('gemini-pro')
 
@@ -64,12 +67,14 @@ class User(UserMixin,db.Model):
     id = db.Column(db.Integer,primary_key=True)
     firstname = db.Column(db.String(25),nullable = False)
     lastname = db.Column(db.String(25),nullable = False)
-    username = db.Column(db.String(25),unique=True,nullable = False)
+    username = db.Column(db.String(25),index=True,unique=True,nullable = False)
     email =  db.Column(db.String(120),unique=True,nullable = False)
     date_joined = db.Column(db.Date,default=datetime.now)
     date_of_birth = db.Column(db.Date,nullable=False)
     gender = db.Column(db.Enum(Gender))
     password_hash = db.Column(db.String(200),nullable = False)
+    token = db.Column(db.String(32),index=True,unique=True)
+    token_expiration = db.Column(db.DateTime)
     bloodgroup = db.Column(db.Enum(BloodGroup))
     genotype = db.Column(db.Enum(Genotype))
     medical_history = db.Column(db.Text)
@@ -88,13 +93,24 @@ class User(UserMixin,db.Model):
 
     def check_password(self,password):
         return check_password_hash(self.password_hash,password)
-
-    def conversations_history_by_last_created(self):
-        history = Conversation.query.filter_by(user_id=self.id)
-        return history.order_by(Conversation.created_at.desc())
-    def conversations_history_by_last_updated(self):
-        history = Conversation.query.filter_by(user_id=self.id)
-        return history.order_by(Conversation.modified_at.desc())    
+    
+    def get_token(self,expires_in=3600):
+        now = datetime.now()
+        if self.token and self.token_expiration > now + timedelta(seconds=60):
+            return self.token
+        self.token = secrets.token_hex(16)
+        self.token_expiration = now + timedelta(seconds=expires_in)
+        print(self.token)
+        db.session.add(self)
+        return self.token
+    def revoke_token(self):
+        self.token_expiration = datetime.now()-timedelta(seconds=1)
+    @staticmethod
+    def check_token(token):
+        user = User.query.filter_by(token=token).first()
+        if user is None or user.token_expiration < datetime.now():
+            return None
+        return user
     def to_dict(self):
         data = {
             'id' : self.id,
@@ -107,6 +123,7 @@ class User(UserMixin,db.Model):
             'bloodgroup':self.bloodgroup.value if self.bloodgroup else None,
             'genotype':self.genotype.value if self.genotype else None,
             'medical_history':self.medical_history,
+            'token':self.token,
             '_links':{
                 'self': url_for('api.get_user',id=self.id),
                 'conversations':url_for('api.get_chats',id=self.id)}
@@ -189,8 +206,6 @@ class Conversation(PaginatedAPIMixin,db.Model):
 
         }
         return data
-   
-
     def from_dict(self,user_id,username,conversation_no=None,new_chat=False,data=None,anony=False):
         if new_chat:
             message = chat()

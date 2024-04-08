@@ -17,8 +17,12 @@ def bad_request(message):
 def handle_exception(e):
     return error_response(e.code)
 
+@bp.app_errorhandler(404)
+def not_found_error(error):
+    return error_response(404)
+
 @bp.app_errorhandler(500)
 def internal_error(error):
     db.session.rollback()
-
+    return error_response(500)
 

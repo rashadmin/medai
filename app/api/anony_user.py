@@ -34,6 +34,7 @@ def create_anony_user():
         "genotype":"SS",
         "medical_history":"I have asthma",
         "gender":"male",
+        "password":"ayom0908"
     }
 {
     "user_message":"my wife was stabbed"

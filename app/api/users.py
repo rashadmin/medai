@@ -1,9 +1,9 @@
 from app.api import bp
-from flask import jsonify,request,url_for
+from flask import jsonify,request,url_for,abort
 from app.models import User,Conversation,Anonyuser
 from app.api.errors import bad_request
 from app import db
-
+from app.api.tokens import token_auth
 
 @bp.route('/users',methods=['POST'])
 def create_user():
@@ -12,7 +12,7 @@ def create_user():
         return bad_request('Must include FIRST NAME,LAST_NAME,USERNAME,EMAIL')
     if User.query.filter_by(username=data['username']).first():
         return bad_request(f'Use a different username as {data["username"]} is taken!')
-    if User.query.filter_by(username=data['email']).first():
+    if User.query.filter_by(email=data['email']).first():
         return bad_request(f'Use a different email as {data["email"]} has been used!')
     user = User()
     print(data)
@@ -25,7 +25,10 @@ def create_user():
     return response
 
 @bp.route('/users/<int:id>',methods=['PUT'])
+@token_auth.login_required
 def update_user(id):
+    if token_auth.current_user().id!=id:
+        abort(403)
     user = User.query.get_or_404(id)
     data = request.get_json() or {}
     if 'email' in data and data['email'] != user.email and User.query.filter_by(email=data['email']).first():
@@ -35,7 +38,10 @@ def update_user(id):
     return jsonify(user.to_dict())
 
 @bp.route('/users/<int:id>',methods=['GET'])
+@token_auth.login_required
 def get_user(id):
+    if token_auth.current_user().id!=id:
+        abort(403)
     data = User.query.get_or_404(id).to_dict()
     return jsonify(data)
 
