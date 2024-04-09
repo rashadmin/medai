@@ -78,6 +78,7 @@ class User(UserMixin,db.Model):
     bloodgroup = db.Column(db.Enum(BloodGroup))
     genotype = db.Column(db.Enum(Genotype))
     medical_history = db.Column(db.Text)
+    referred = db.Relationship('Anonyuser',backref='user')
     conversations = db.Relationship('Conversation',backref = 'user')
     
 
@@ -100,7 +101,6 @@ class User(UserMixin,db.Model):
             return self.token
         self.token = secrets.token_hex(16)
         self.token_expiration = now + timedelta(seconds=expires_in)
-        print(self.token)
         db.session.add(self)
         return self.token
     def revoke_token(self):
@@ -123,12 +123,20 @@ class User(UserMixin,db.Model):
             'bloodgroup':self.bloodgroup.value if self.bloodgroup else None,
             'genotype':self.genotype.value if self.genotype else None,
             'medical_history':self.medical_history,
+            'No of reffered':self.count_referrals(),
+            'Refferal':self.list_referrals(),
             'token':self.token,
             '_links':{
                 'self': url_for('api.get_user',id=self.id),
                 'conversations':url_for('api.get_chats',id=self.id)}
         }
         return data
+    def count_referrals(self):
+        return Anonyuser.query.filter_by(referrer=self.id).count()
+    
+    def list_referrals(self):
+        referrals_object = Anonyuser.query.filter_by(referrer=self.id).all()
+        return [i.username for i in referrals_object]
     def from_dict(self,data,new_user=False):
         for field in ['firstname','lastname','username','email','gender','date_of_birth','bloodgroup','genotype','medical_history']:
             if field in data and field != 'date_of_birth':
@@ -144,6 +152,7 @@ class Anonyuser(UserMixin,db.Model):
     age = db.Column(db.Enum(Age_Class))
     gender = db.Column(db.Enum(Gender))
     date_created = db.Column(db.Date,default=datetime.now)
+    referrer = db.Column(db.Integer,db.ForeignKey('user.id'))
     bloodgroup = db.Column(db.Enum(BloodGroup))
     genotype = db.Column(db.Enum(Genotype))
     medical_history = db.Column(db.Text)
@@ -156,6 +165,7 @@ class Anonyuser(UserMixin,db.Model):
     def to_dict(self):
         data = {
             'username':self.username,
+            'referrer':self.referrer,
             'Gender':self.gender.value if self.gender else None,
             'Age':self.age.value if self.age else None,
             'bloodgroup':self.bloodgroup.value if self.bloodgroup else None,
@@ -166,8 +176,9 @@ class Anonyuser(UserMixin,db.Model):
                 'conversations':url_for('api.get_anony_chat',user_id=self.username)}
         }
         return data
-    def from_dict(self,user_id,data=None):
+    def from_dict(self,user_id,referrer,data=None):
         self.username = user_id
+        self.referrer = referrer
         for field in ['bloodgroup','genotype','medical_history','gender','age']:
             if field in data :
                 setattr(self,field,data[field])
@@ -241,7 +252,6 @@ class Conversation(PaginatedAPIMixin,db.Model):
                         search_keywords=None
                 except JSONDecodeError:
                     search_keywords = None
-                print('info',search_keywords)
                 if search_keywords:
                     returned_link = [return_url(keyword) for keyword in search_keywords]
                     print('info2',returned_link)
@@ -261,7 +271,6 @@ class Conversation(PaginatedAPIMixin,db.Model):
     def check_length(self):
         return model.count_tokens(json.loads(self.message)).total_tokens
     def to_hospital_dict(self):
-        print(self.info_hospital)
         if self.info_hospital:
             info = eval(self.info_hospital)
             if info['Situation'] == 'non medical related condition':

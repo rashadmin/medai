@@ -1,0 +1,101 @@
+2024-04-08 06:32:46,483 INFO: hub_startup [in /home/py_sama/medic_ai/app/__init__.py : 53]
+2024-04-08 06:33:53,723 INFO: hub_startup [in /home/py_sama/medic_ai/app/__init__.py : 53]
+2024-04-08 13:40:17,742 INFO: hub_startup [in /home/py_sama/medic_ai/app/__init__.py : 53]
+2024-04-08 14:13:56,932 INFO: hub_startup [in /home/py_sama/medic_ai/app/__init__.py : 53]
+2024-04-08 18:32:10,916 INFO: hub_startup [in /home/py_sama/medic_ai/app/__init__.py : 53]
+2024-04-08 18:32:35,059 INFO: hub_startup [in /home/py_sama/medic_ai/app/__init__.py : 53]
+2024-04-08 18:33:16,421 INFO: hub_startup [in /home/py_sama/medic_ai/app/__init__.py : 53]
+2024-04-08 18:39:16,037 INFO: hub_startup [in /home/py_sama/medic_ai/app/__init__.py : 53]
+2024-04-08 22:47:52,234 INFO: hub_startup [in /home/py_sama/medic_ai/app/__init__.py : 53]
+2024-04-08 22:48:02,680 INFO: hub_startup [in /home/py_sama/medic_ai/app/__init__.py : 53]
+2024-04-08 22:48:17,200 INFO: hub_startup [in /home/py_sama/medic_ai/app/__init__.py : 53]
+2024-04-09 04:57:59,762 INFO: hub_startup [in /home/py_sama/medic_ai/app/__init__.py : 53]
+2024-04-09 05:42:57,217 ERROR: Exception on /api/users [POST] [in /home/py_sama/medic_ai/medic_ai_env/lib/python3.11/site-packages/flask/app.py : 825]
+Traceback (most recent call last):
+  File "/home/py_sama/medic_ai/medic_ai_env/lib/python3.11/site-packages/flask/app.py", line 1455, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/py_sama/medic_ai/medic_ai_env/lib/python3.11/site-packages/flask/app.py", line 869, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/py_sama/medic_ai/medic_ai_env/lib/python3.11/site-packages/flask_cors/extension.py", line 176, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+                                                ^^^^^^^^^^^^^^^^^^
+  File "/home/py_sama/medic_ai/medic_ai_env/lib/python3.11/site-packages/flask/app.py", line 867, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/py_sama/medic_ai/medic_ai_env/lib/python3.11/site-packages/flask/app.py", line 852, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/py_sama/medic_ai/app/api/users.py", line 22, in create_user
+    response = jsonify(user.to_dict())
+                       ^^^^^^^^^^^^^^
+  File "/home/py_sama/medic_ai/app/models.py", line 127, in to_dict
+    'No of reffered':self.count_referrals(),
+                     ^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/py_sama/medic_ai/app/models.py", line 136, in count_referrals
+    return Anonyuser.filterby(referrer=self.id).count()
+           ^^^^^^^^^^^^^^^^^^
+AttributeError: type object 'Anonyuser' has no attribute 'filterby'
+2024-04-09 05:45:24,570 ERROR: Exception on /api/users/7 [GET] [in /home/py_sama/medic_ai/medic_ai_env/lib/python3.11/site-packages/flask/app.py : 825]
+Traceback (most recent call last):
+  File "/home/py_sama/medic_ai/medic_ai_env/lib/python3.11/site-packages/flask/app.py", line 1455, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/py_sama/medic_ai/medic_ai_env/lib/python3.11/site-packages/flask/app.py", line 869, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/py_sama/medic_ai/medic_ai_env/lib/python3.11/site-packages/flask_cors/extension.py", line 176, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+                                                ^^^^^^^^^^^^^^^^^^
+  File "/home/py_sama/medic_ai/medic_ai_env/lib/python3.11/site-packages/flask/app.py", line 867, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/py_sama/medic_ai/medic_ai_env/lib/python3.11/site-packages/flask/app.py", line 852, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/py_sama/medic_ai/medic_ai_env/lib/python3.11/site-packages/flask_httpauth.py", line 174, in decorated
+    return self.ensure_sync(f)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/py_sama/medic_ai/app/api/users.py", line 45, in get_user
+    data = User.query.get_or_404(id).to_dict()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/py_sama/medic_ai/app/models.py", line 127, in to_dict
+    'No of reffered':self.count_referrals(),
+                     ^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/py_sama/medic_ai/app/models.py", line 136, in count_referrals
+    return Anonyuser.query.filterby(referrer=self.id).count()
+           ^^^^^^^^^^^^^^^^^^
+AttributeError: type object 'Anonyuser' has no attribute 'filterby'
+2024-04-09 05:46:33,644 INFO: hub_startup [in /home/py_sama/medic_ai/app/__init__.py : 53]
+2024-04-09 05:46:39,079 ERROR: Exception on /api/users/7 [GET] [in /home/py_sama/medic_ai/medic_ai_env/lib/python3.11/site-packages/flask/app.py : 825]
+Traceback (most recent call last):
+  File "/home/py_sama/medic_ai/medic_ai_env/lib/python3.11/site-packages/flask/app.py", line 1455, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/py_sama/medic_ai/medic_ai_env/lib/python3.11/site-packages/flask/app.py", line 869, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/py_sama/medic_ai/medic_ai_env/lib/python3.11/site-packages/flask_cors/extension.py", line 176, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+                                                ^^^^^^^^^^^^^^^^^^
+  File "/home/py_sama/medic_ai/medic_ai_env/lib/python3.11/site-packages/flask/app.py", line 867, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/py_sama/medic_ai/medic_ai_env/lib/python3.11/site-packages/flask/app.py", line 852, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/py_sama/medic_ai/medic_ai_env/lib/python3.11/site-packages/flask_httpauth.py", line 174, in decorated
+    return self.ensure_sync(f)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/py_sama/medic_ai/app/api/users.py", line 45, in get_user
+    data = User.query.get_or_404(id).to_dict()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/py_sama/medic_ai/app/models.py", line 127, in to_dict
+    'No of reffered':self.count_referrals(),
+                     ^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/py_sama/medic_ai/app/models.py", line 136, in count_referrals
+    return Anonyuser.query.filterby(referrer=self.id).count()
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'Query' object has no attribute 'filterby'
+2024-04-09 05:47:26,600 INFO: hub_startup [in /home/py_sama/medic_ai/app/__init__.py : 53]

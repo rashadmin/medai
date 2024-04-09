@@ -15,7 +15,6 @@ def create_user():
     if User.query.filter_by(email=data['email']).first():
         return bad_request(f'Use a different email as {data["email"]} has been used!')
     user = User()
-    print(data)
     user.from_dict(data,new_user=True)
     db.session.add(user)
     db.session.commit()

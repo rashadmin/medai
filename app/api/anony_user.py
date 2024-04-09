@@ -4,6 +4,7 @@ from app.models import User,Conversation,Anonyuser
 from app.api.errors import bad_request
 from app import db
 import uuid
+from app.api.tokens import token_auth
 
 
 @bp.route('/anony_users',methods=['POST'])
@@ -11,9 +12,10 @@ def create_anony_user():
     while True:
         user_id = str(uuid.uuid4())
         if  not Anonyuser.query.filter_by(username=user_id).first():
+            referrer = User.query.filter_by(token=token_auth.get_auth().token).first().id
             user = Anonyuser()
             data = request.get_json() or {}
-            user.from_dict(user_id,data) 
+            user.from_dict(user_id,referrer,data) 
             db.session.add(user)
             db.session.commit()
             response = jsonify(user.to_dict())
@@ -21,9 +23,6 @@ def create_anony_user():
             response.headers['location'] = url_for('api.add_anony_chat',user_id=user.username)
             return response
         
-
-
-
     {
         "firstname":"Bayo",
         "lastname":"Ade",
