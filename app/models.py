@@ -7,13 +7,14 @@ import enum
 from app.chat.chat import chat,Information
 from app.videos.video_functions import return_url
 from json.decoder import JSONDecodeError
-from flask import url_for
+from flask import url_for,current_app
 import os
 import secrets
 import json
 import google.generativeai as genai
 import base64
 
+genai.configure(api_key=current_app.config["GEMINI_API_KEY"])
 model = genai.GenerativeModel('gemini-pro')
 
 class Age_Class(enum.Enum):
