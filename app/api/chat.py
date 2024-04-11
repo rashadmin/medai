@@ -30,10 +30,12 @@ def update_chat(id,chat_id):
     if token_auth.current_user().id!=id:
         abort(403)
     conversation = Conversation.query.filter_by(user_id=id,conversation_no=chat_id).first_or_404()
+    user = User.query.get_or_404(id)
+    username = user.to_dict()['username']
     data = request.get_json() or {}
     if  'user_message' not in  data:
         return bad_request('Specify the Conversation number and Ensure message is in data')
-    conversation.from_dict(id,data=data)
+    conversation.from_dict(id,username=username,data=data)
     db.session.commit()
     return jsonify(conversation.to_dict())
 

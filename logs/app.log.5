@@ -1,0 +1,117 @@
+2024-04-10 18:42:23,679 ERROR: Exception on /api/anony_users/2f8bcbcd-bb85-4f24-b485-a5ecf462efaa/chat [POST] [in /home/py_sama/medic_ai/medic_ai_env/lib/python3.11/site-packages/flask/app.py : 825]
+Traceback (most recent call last):
+  File "/home/py_sama/medic_ai/medic_ai_env/lib/python3.11/site-packages/flask/app.py", line 1455, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/py_sama/medic_ai/medic_ai_env/lib/python3.11/site-packages/flask/app.py", line 869, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/py_sama/medic_ai/medic_ai_env/lib/python3.11/site-packages/flask_cors/extension.py", line 176, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+                                                ^^^^^^^^^^^^^^^^^^
+  File "/home/py_sama/medic_ai/medic_ai_env/lib/python3.11/site-packages/flask/app.py", line 867, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/py_sama/medic_ai/medic_ai_env/lib/python3.11/site-packages/flask/app.py", line 852, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/py_sama/medic_ai/app/api/anony_chat.py", line 15, in add_anony_chat
+    response = jsonify(conversation.to_dict())
+                       ^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/py_sama/medic_ai/app/models.py", line 216, in to_dict
+    'hospital_link':url_for('api.hospital_info_for_user',id=self.user_id,conv_id=self.conversation_no)}
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/py_sama/medic_ai/medic_ai_env/lib/python3.11/site-packages/flask/helpers.py", line 222, in url_for
+    return current_app.url_for(
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/home/py_sama/medic_ai/medic_ai_env/lib/python3.11/site-packages/flask/app.py", line 1071, in url_for
+    return self.handle_url_build_error(error, endpoint, values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/py_sama/medic_ai/medic_ai_env/lib/python3.11/site-packages/flask/app.py", line 1060, in url_for
+    rv = url_adapter.build(  # type: ignore[union-attr]
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/py_sama/medic_ai/medic_ai_env/lib/python3.11/site-packages/werkzeug/routing/map.py", line 919, in build
+    raise BuildError(endpoint, values, method, self)
+werkzeug.routing.exceptions.BuildError: Could not build url for endpoint 'api.hospital_info_for_user'. Did you forget to specify values ['conv_id', 'id']?
+2024-04-10 18:42:53,826 INFO: hub_startup [in /home/py_sama/medic_ai/app/__init__.py : 53]
+2024-04-10 18:47:51,822 ERROR: Exception on /api/anony_users [POST] [in /home/py_sama/medic_ai/medic_ai_env/lib/python3.11/site-packages/flask/app.py : 825]
+Traceback (most recent call last):
+  File "/home/py_sama/medic_ai/medic_ai_env/lib/python3.11/site-packages/flask/app.py", line 1455, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/py_sama/medic_ai/medic_ai_env/lib/python3.11/site-packages/flask/app.py", line 869, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/py_sama/medic_ai/medic_ai_env/lib/python3.11/site-packages/flask_cors/extension.py", line 176, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+                                                ^^^^^^^^^^^^^^^^^^
+  File "/home/py_sama/medic_ai/medic_ai_env/lib/python3.11/site-packages/flask/app.py", line 867, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/py_sama/medic_ai/medic_ai_env/lib/python3.11/site-packages/flask/app.py", line 852, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/py_sama/medic_ai/app/api/anony_user.py", line 15, in create_anony_user
+    referrer = User.query.filter_by(token=token_auth.get_auth().token).first().id
+                                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'token'
+2024-04-10 18:50:34,407 INFO: hub_startup [in /home/py_sama/medic_ai/app/__init__.py : 53]
+2024-04-10 18:51:50,699 INFO: hub_startup [in /home/py_sama/medic_ai/app/__init__.py : 53]
+2024-04-10 18:51:54,256 ERROR: Exception on /api/anony_users [POST] [in /home/py_sama/medic_ai/medic_ai_env/lib/python3.11/site-packages/flask/app.py : 825]
+Traceback (most recent call last):
+  File "/home/py_sama/medic_ai/medic_ai_env/lib/python3.11/site-packages/flask/app.py", line 1455, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/py_sama/medic_ai/medic_ai_env/lib/python3.11/site-packages/flask/app.py", line 869, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/py_sama/medic_ai/medic_ai_env/lib/python3.11/site-packages/flask_cors/extension.py", line 176, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+                                                ^^^^^^^^^^^^^^^^^^
+  File "/home/py_sama/medic_ai/medic_ai_env/lib/python3.11/site-packages/flask/app.py", line 867, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/py_sama/medic_ai/medic_ai_env/lib/python3.11/site-packages/flask/app.py", line 852, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/py_sama/medic_ai/app/api/anony_user.py", line 19, in create_anony_user
+    user.from_dict(user_id,referrer,data)
+                          ^^^^^^^^
+UnboundLocalError: cannot access local variable 'referrer' where it is not associated with a value
+2024-04-10 18:52:43,518 INFO: hub_startup [in /home/py_sama/medic_ai/app/__init__.py : 53]
+2024-04-10 19:44:08,216 ERROR: Exception on /api/anony_users/b0f03ac1-a448-40ec-bd9d-a0fff22e4c57/chat [GET] [in /home/py_sama/medic_ai/medic_ai_env/lib/python3.11/site-packages/flask/app.py : 825]
+Traceback (most recent call last):
+  File "/home/py_sama/medic_ai/medic_ai_env/lib/python3.11/site-packages/flask/app.py", line 1455, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/py_sama/medic_ai/medic_ai_env/lib/python3.11/site-packages/flask/app.py", line 869, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/py_sama/medic_ai/medic_ai_env/lib/python3.11/site-packages/flask_cors/extension.py", line 176, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+                                                ^^^^^^^^^^^^^^^^^^
+  File "/home/py_sama/medic_ai/medic_ai_env/lib/python3.11/site-packages/flask/app.py", line 867, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/py_sama/medic_ai/medic_ai_env/lib/python3.11/site-packages/flask/app.py", line 852, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/py_sama/medic_ai/app/api/anony_chat.py", line 23, in get_anony_chat
+    data = Conversation.query.filter_by(anony_user_id=user_id).first_or_404().to_dict()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/py_sama/medic_ai/app/models.py", line 216, in to_dict
+    'hospital_link':url_for('api.hospital_info_for_user',id=self.user_id,conv_id=self.conversation_no)}
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/py_sama/medic_ai/medic_ai_env/lib/python3.11/site-packages/flask/helpers.py", line 222, in url_for
+    return current_app.url_for(
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/home/py_sama/medic_ai/medic_ai_env/lib/python3.11/site-packages/flask/app.py", line 1071, in url_for
+    return self.handle_url_build_error(error, endpoint, values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/py_sama/medic_ai/medic_ai_env/lib/python3.11/site-packages/flask/app.py", line 1060, in url_for
+    rv = url_adapter.build(  # type: ignore[union-attr]
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/py_sama/medic_ai/medic_ai_env/lib/python3.11/site-packages/werkzeug/routing/map.py", line 919, in build
+    raise BuildError(endpoint, values, method, self)
+werkzeug.routing.exceptions.BuildError: Could not build url for endpoint 'api.hospital_info_for_user'. Did you forget to specify values ['conv_id', 'id']?
+2024-04-10 19:45:19,938 INFO: hub_startup [in /home/py_sama/medic_ai/app/__init__.py : 53]

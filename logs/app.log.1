@@ -1,4 +1,4 @@
-2024-04-09 05:47:29,315 ERROR: Exception on /api/users/7 [GET] [in /home/py_sama/medic_ai/medic_ai_env/lib/python3.11/site-packages/flask/app.py : 825]
+2024-04-11 06:38:28,627 ERROR: Exception on /api/anony_users/b0f03ac1-a448-40ec-bd9d-a0fff22e4c57/chat [GET] [in /home/py_sama/medic_ai/medic_ai_env/lib/python3.11/site-packages/flask/app.py : 825]
 Traceback (most recent call last):
   File "/home/py_sama/medic_ai/medic_ai_env/lib/python3.11/site-packages/flask/app.py", line 1455, in wsgi_app
     response = self.full_dispatch_request()
@@ -15,35 +15,40 @@ Traceback (most recent call last):
   File "/home/py_sama/medic_ai/medic_ai_env/lib/python3.11/site-packages/flask/app.py", line 852, in dispatch_request
     return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)
            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/py_sama/medic_ai/medic_ai_env/lib/python3.11/site-packages/flask_httpauth.py", line 174, in decorated
-    return self.ensure_sync(f)(*args, **kwargs)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/py_sama/medic_ai/app/api/users.py", line 46, in get_user
-    return jsonify(data)
-           ^^^^^^^^^^^^^
-  File "/home/py_sama/medic_ai/medic_ai_env/lib/python3.11/site-packages/flask/json/__init__.py", line 170, in jsonify
-    return current_app.json.response(*args, **kwargs)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/py_sama/medic_ai/medic_ai_env/lib/python3.11/site-packages/flask/json/provider.py", line 215, in response
-    f"{self.dumps(obj, **dump_args)}\n", mimetype=self.mimetype
-       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/py_sama/medic_ai/medic_ai_env/lib/python3.11/site-packages/flask/json/provider.py", line 180, in dumps
-    return json.dumps(obj, **kwargs)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/py_sama/anaconda3/lib/python3.11/json/__init__.py", line 238, in dumps
-    **kw).encode(obj)
-          ^^^^^^^^^^^
-  File "/home/py_sama/anaconda3/lib/python3.11/json/encoder.py", line 200, in encode
-    chunks = self.iterencode(o, _one_shot=True)
-             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/py_sama/anaconda3/lib/python3.11/json/encoder.py", line 258, in iterencode
-    return _iterencode(o, 0)
-           ^^^^^^^^^^^^^^^^^
-  File "/home/py_sama/medic_ai/medic_ai_env/lib/python3.11/site-packages/flask/json/provider.py", line 120, in _default
-    raise TypeError(f"Object of type {type(o).__name__} is not JSON serializable")
-TypeError: Object of type Query is not JSON serializable
-2024-04-09 05:48:27,613 INFO: hub_startup [in /home/py_sama/medic_ai/app/__init__.py : 53]
-2024-04-09 05:49:19,478 ERROR: Exception on /api/anony_users [POST] [in /home/py_sama/medic_ai/medic_ai_env/lib/python3.11/site-packages/flask/app.py : 825]
+  File "/home/py_sama/medic_ai/app/api/anony_chat.py", line 23, in get_anony_chat
+    data = Conversation.query.filter_by(anony_user_id=user_id).first_or_404().to_anony_dict()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/py_sama/medic_ai/app/models.py", line 229, in to_anony_dict
+    'length': self.check_length(),
+              ^^^^^^^^^^^^^^^^^^^
+  File "/home/py_sama/medic_ai/app/models.py", line 287, in check_length
+    return model.count_tokens(json.loads(self.message)).total_tokens
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/py_sama/medic_ai/medic_ai_env/lib/python3.11/site-packages/google/generativeai/generative_models.py", line 285, in count_tokens
+    self._client = client.get_default_generative_client()
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/py_sama/medic_ai/medic_ai_env/lib/python3.11/site-packages/google/generativeai/client.py", line 229, in get_default_generative_client
+    return _client_manager.get_default_client("generative")
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/py_sama/medic_ai/medic_ai_env/lib/python3.11/site-packages/google/generativeai/client.py", line 161, in get_default_client
+    client = self.make_client(name)
+             ^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/py_sama/medic_ai/medic_ai_env/lib/python3.11/site-packages/google/generativeai/client.py", line 121, in make_client
+    client = cls(**self.client_config)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/py_sama/medic_ai/medic_ai_env/lib/python3.11/site-packages/google/ai/generativelanguage_v1beta/services/generative_service/client.py", line 433, in __init__
+    self._transport = Transport(
+                      ^^^^^^^^^^
+  File "/home/py_sama/medic_ai/medic_ai_env/lib/python3.11/site-packages/google/ai/generativelanguage_v1beta/services/generative_service/transports/grpc.py", line 150, in __init__
+    super().__init__(
+  File "/home/py_sama/medic_ai/medic_ai_env/lib/python3.11/site-packages/google/ai/generativelanguage_v1beta/services/generative_service/transports/base.py", line 98, in __init__
+    credentials, _ = google.auth.default(
+                     ^^^^^^^^^^^^^^^^^^^^
+  File "/home/py_sama/medic_ai/medic_ai_env/lib/python3.11/site-packages/google/auth/_default.py", line 691, in default
+    raise exceptions.DefaultCredentialsError(_CLOUD_SDK_MISSING_CREDENTIALS)
+google.auth.exceptions.DefaultCredentialsError: Your default credentials were not found. To set up Application Default Credentials, see https://cloud.google.com/docs/authentication/external/set-up-adc for more information.
+2024-04-11 06:48:02,887 INFO: hub_startup [in /home/py_sama/medic_ai/app/__init__.py : 53]
+2024-04-11 06:48:14,191 ERROR: Exception on /api/anony_users/b0f03ac1-a448-40ec-bd9d-a0fff22e4c57/chat [GET] [in /home/py_sama/medic_ai/medic_ai_env/lib/python3.11/site-packages/flask/app.py : 825]
 Traceback (most recent call last):
   File "/home/py_sama/medic_ai/medic_ai_env/lib/python3.11/site-packages/flask/app.py", line 1455, in wsgi_app
     response = self.full_dispatch_request()
@@ -60,58 +65,36 @@ Traceback (most recent call last):
   File "/home/py_sama/medic_ai/medic_ai_env/lib/python3.11/site-packages/flask/app.py", line 852, in dispatch_request
     return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)
            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/py_sama/medic_ai/app/api/anony_user.py", line 17, in create_anony_user
-    user.from_dict(user_id,data,referrer)
-  File "/home/py_sama/medic_ai/app/models.py", line 183, in from_dict
-    if field in data :
-       ^^^^^^^^^^^^^
-TypeError: argument of type 'NoneType' is not iterable
-2024-04-09 05:51:43,257 INFO: hub_startup [in /home/py_sama/medic_ai/app/__init__.py : 53]
-2024-04-09 06:16:50,536 INFO: hub_startup [in /home/py_sama/medic_ai/app/__init__.py : 53]
-2024-04-09 06:18:49,292 ERROR: Exception on /api/anony_users [POST] [in /home/py_sama/medic_ai/medic_ai_env/lib/python3.11/site-packages/flask/app.py : 825]
-Traceback (most recent call last):
-  File "/home/py_sama/medic_ai/medic_ai_env/lib/python3.11/site-packages/flask/app.py", line 1455, in wsgi_app
-    response = self.full_dispatch_request()
-               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/py_sama/medic_ai/medic_ai_env/lib/python3.11/site-packages/flask/app.py", line 869, in full_dispatch_request
-    rv = self.handle_user_exception(e)
-         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/py_sama/medic_ai/medic_ai_env/lib/python3.11/site-packages/flask_cors/extension.py", line 176, in wrapped_function
-    return cors_after_request(app.make_response(f(*args, **kwargs)))
-                                                ^^^^^^^^^^^^^^^^^^
-  File "/home/py_sama/medic_ai/medic_ai_env/lib/python3.11/site-packages/flask/app.py", line 867, in full_dispatch_request
-    rv = self.dispatch_request()
-         ^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/py_sama/medic_ai/medic_ai_env/lib/python3.11/site-packages/flask/app.py", line 852, in dispatch_request
-    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/py_sama/medic_ai/app/api/anony_user.py", line 14, in create_anony_user
-    print(token_auth.current_user().id)
-          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-AttributeError: 'NoneType' object has no attribute 'id'
-2024-04-09 06:25:38,851 ERROR: Exception on /api/anony_users [POST] [in /home/py_sama/medic_ai/medic_ai_env/lib/python3.11/site-packages/flask/app.py : 825]
-Traceback (most recent call last):
-  File "/home/py_sama/medic_ai/medic_ai_env/lib/python3.11/site-packages/flask/app.py", line 1455, in wsgi_app
-    response = self.full_dispatch_request()
-               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/py_sama/medic_ai/medic_ai_env/lib/python3.11/site-packages/flask/app.py", line 869, in full_dispatch_request
-    rv = self.handle_user_exception(e)
-         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/py_sama/medic_ai/medic_ai_env/lib/python3.11/site-packages/flask_cors/extension.py", line 176, in wrapped_function
-    return cors_after_request(app.make_response(f(*args, **kwargs)))
-                                                ^^^^^^^^^^^^^^^^^^
-  File "/home/py_sama/medic_ai/medic_ai_env/lib/python3.11/site-packages/flask/app.py", line 867, in full_dispatch_request
-    rv = self.dispatch_request()
-         ^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/py_sama/medic_ai/medic_ai_env/lib/python3.11/site-packages/flask/app.py", line 852, in dispatch_request
-    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/py_sama/medic_ai/app/api/anony_user.py", line 14, in create_anony_user
-    if  not Anonyuser.query.filter_by(username=user_id).first():
-              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-AttributeError: 'NoneType' object has no attribute 'id'
-2024-04-09 06:25:44,836 INFO: hub_startup [in /home/py_sama/medic_ai/app/__init__.py : 53]
-2024-04-09 06:26:08,332 INFO: hub_startup [in /home/py_sama/medic_ai/app/__init__.py : 53]
-2024-04-09 06:27:42,926 INFO: hub_startup [in /home/py_sama/medic_ai/app/__init__.py : 53]
-2024-04-09 06:28:47,385 INFO: hub_startup [in /home/py_sama/medic_ai/app/__init__.py : 53]
-2024-04-09 06:30:13,631 INFO: hub_startup [in /home/py_sama/medic_ai/app/__init__.py : 53]
+  File "/home/py_sama/medic_ai/app/api/anony_chat.py", line 23, in get_anony_chat
+    data = Conversation.query.filter_by(anony_user_id=user_id).first_or_404().to_anony_dict()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/py_sama/medic_ai/app/models.py", line 229, in to_anony_dict
+    'length': self.check_length(),
+              ^^^^^^^^^^^^^^^^^^^
+  File "/home/py_sama/medic_ai/app/models.py", line 287, in check_length
+    return model.count_tokens(json.loads(self.message)).total_tokens
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/py_sama/medic_ai/medic_ai_env/lib/python3.11/site-packages/google/generativeai/generative_models.py", line 285, in count_tokens
+    self._client = client.get_default_generative_client()
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/py_sama/medic_ai/medic_ai_env/lib/python3.11/site-packages/google/generativeai/client.py", line 229, in get_default_generative_client
+    return _client_manager.get_default_client("generative")
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/py_sama/medic_ai/medic_ai_env/lib/python3.11/site-packages/google/generativeai/client.py", line 161, in get_default_client
+    client = self.make_client(name)
+             ^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/py_sama/medic_ai/medic_ai_env/lib/python3.11/site-packages/google/generativeai/client.py", line 121, in make_client
+    client = cls(**self.client_config)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/py_sama/medic_ai/medic_ai_env/lib/python3.11/site-packages/google/ai/generativelanguage_v1beta/services/generative_service/client.py", line 433, in __init__
+    self._transport = Transport(
+                      ^^^^^^^^^^
+  File "/home/py_sama/medic_ai/medic_ai_env/lib/python3.11/site-packages/google/ai/generativelanguage_v1beta/services/generative_service/transports/grpc.py", line 150, in __init__
+    super().__init__(
+  File "/home/py_sama/medic_ai/medic_ai_env/lib/python3.11/site-packages/google/ai/generativelanguage_v1beta/services/generative_service/transports/base.py", line 98, in __init__
+    credentials, _ = google.auth.default(
+                     ^^^^^^^^^^^^^^^^^^^^
+  File "/home/py_sama/medic_ai/medic_ai_env/lib/python3.11/site-packages/google/auth/_default.py", line 691, in default
+    raise exceptions.DefaultCredentialsError(_CLOUD_SDK_MISSING_CREDENTIALS)
+google.auth.exceptions.DefaultCredentialsError: Your default credentials were not found. To set up Application Default Credentials, see https://cloud.google.com/docs/authentication/external/set-up-adc for more information.
+2024-04-11 06:51:09,156 INFO: hub_startup [in /home/py_sama/medic_ai/app/__init__.py : 53]

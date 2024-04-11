@@ -1,0 +1,82 @@
+2024-04-10 18:07:22,536 ERROR: Exception on /api/users/7/chats [POST] [in /home/py_sama/medic_ai/medic_ai_env/lib/python3.11/site-packages/flask/app.py : 825]
+Traceback (most recent call last):
+  File "/home/py_sama/medic_ai/medic_ai_env/lib/python3.11/site-packages/google/api_core/grpc_helpers.py", line 79, in error_remapped_callable
+    return callable_(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/py_sama/medic_ai/medic_ai_env/lib/python3.11/site-packages/grpc/_channel.py", line 1176, in __call__
+    return _end_unary_response_blocking(state, call, False, None)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/py_sama/medic_ai/medic_ai_env/lib/python3.11/site-packages/grpc/_channel.py", line 1005, in _end_unary_response_blocking
+    raise _InactiveRpcError(state)  # pytype: disable=not-instantiable
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+grpc._channel._InactiveRpcError: <_InactiveRpcError of RPC that terminated with:
+	status = StatusCode.PERMISSION_DENIED
+	details = "Generative Language API has not been used in project 770492558139 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=770492558139 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry."
+	debug_error_string = "UNKNOWN:Error received from peer ipv4:142.250.200.106:443 {grpc_message:"Generative Language API has not been used in project 770492558139 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=770492558139 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry.", grpc_status:7, created_time:"2024-04-10T18:07:22.536081236+01:00"}"
+>
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/py_sama/medic_ai/medic_ai_env/lib/python3.11/site-packages/flask/app.py", line 1455, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/py_sama/medic_ai/medic_ai_env/lib/python3.11/site-packages/flask/app.py", line 869, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/py_sama/medic_ai/medic_ai_env/lib/python3.11/site-packages/flask_cors/extension.py", line 176, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+                                                ^^^^^^^^^^^^^^^^^^
+  File "/home/py_sama/medic_ai/medic_ai_env/lib/python3.11/site-packages/flask/app.py", line 867, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/py_sama/medic_ai/medic_ai_env/lib/python3.11/site-packages/flask/app.py", line 852, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/py_sama/medic_ai/medic_ai_env/lib/python3.11/site-packages/flask_httpauth.py", line 174, in decorated
+    return self.ensure_sync(f)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/py_sama/medic_ai/app/api/chat.py", line 53, in add_chat
+    response = jsonify(conversation.to_dict())
+                       ^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/py_sama/medic_ai/app/models.py", line 214, in to_dict
+    'length': self.check_length(),
+              ^^^^^^^^^^^^^^^^^^^
+  File "/home/py_sama/medic_ai/app/models.py", line 272, in check_length
+    return model.count_tokens(json.loads(self.message)).total_tokens
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/py_sama/medic_ai/medic_ai_env/lib/python3.11/site-packages/google/generativeai/generative_models.py", line 287, in count_tokens
+    return self._client.count_tokens(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/py_sama/medic_ai/medic_ai_env/lib/python3.11/site-packages/google/ai/generativelanguage_v1beta/services/generative_service/client.py", line 1215, in count_tokens
+    response = rpc(
+               ^^^^
+  File "/home/py_sama/medic_ai/medic_ai_env/lib/python3.11/site-packages/google/api_core/gapic_v1/method.py", line 131, in __call__
+    return wrapped_func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/py_sama/medic_ai/medic_ai_env/lib/python3.11/site-packages/google/api_core/retry.py", line 372, in retry_wrapped_func
+    return retry_target(
+           ^^^^^^^^^^^^^
+  File "/home/py_sama/medic_ai/medic_ai_env/lib/python3.11/site-packages/google/api_core/retry.py", line 207, in retry_target
+    result = target()
+             ^^^^^^^^
+  File "/home/py_sama/medic_ai/medic_ai_env/lib/python3.11/site-packages/google/api_core/timeout.py", line 120, in func_with_timeout
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/py_sama/medic_ai/medic_ai_env/lib/python3.11/site-packages/google/api_core/grpc_helpers.py", line 81, in error_remapped_callable
+    raise exceptions.from_grpc_error(exc) from exc
+google.api_core.exceptions.PermissionDenied: 403 Generative Language API has not been used in project 770492558139 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=770492558139 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry. [links {
+  description: "Google developers console API activation"
+  url: "https://console.developers.google.com/apis/api/generativelanguage.googleapis.com/overview?project=770492558139"
+}
+, reason: "SERVICE_DISABLED"
+domain: "googleapis.com"
+metadata {
+  key: "service"
+  value: "generativelanguage.googleapis.com"
+}
+metadata {
+  key: "consumer"
+  value: "projects/770492558139"
+}
+]

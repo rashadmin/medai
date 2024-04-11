@@ -4,7 +4,7 @@ import google.generativeai as genai
 from google.generativeai.types import HarmCategory, HarmBlockThreshold
 class chat():
     def __init__(self,history=None):
-        genai.configure(api_key=current_app.config["YOUTUBE_API_KEY"])
+        genai.configure(api_key=current_app.config["GEMINI_API_KEY"])
         #self.message = json.loads(message)
         self.gemini_model = genai.GenerativeModel('gemini-pro')
         self.message = '''
@@ -47,7 +47,7 @@ class chat():
 
 class Information():
     def __init__(self):
-        genai.configure(api_key=current_app.config["YOUTUBE_API_KEY"])
+        genai.configure(api_key=current_app.config["GEMINI_API_KEY"])
         genai.GenerationConfig(temperature=1)
         self.gemini_model = genai.GenerativeModel('gemini-pro')
         self.message =  '''

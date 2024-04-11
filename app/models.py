@@ -213,11 +213,26 @@ class Conversation(PaginatedAPIMixin,db.Model):
             'message':json.loads(self.message)[2:],
             'length': self.check_length(),
             '_links':{'youtube_link':self.youtube_link,
-                      'hospital_link':url_for('api.hospital_info_for_user',id=self.user_id)}
+                      'hospital_link':url_for('api.hospital_info_for_user',id=self.user_id,conv_id=self.conversation_no)}
 
         }
         return data
-    def from_dict(self,user_id,username,conversation_no=None,new_chat=False,data=None,anony=False):
+    
+    def to_anony_dict(self):
+        data = {
+            'id' : self.anony_user_id,
+            'conversation_no':self.conversation_no,
+            'created_at': self.created_at.isoformat() + 'Z',
+            'modified_at':self.modified_at.isoformat() + 'Z',
+            'title':self.title,
+            'message':json.loads(self.message)[2:],
+            'length': self.check_length(),
+            '_links':{'youtube_link':self.youtube_link,
+                      'hospital_link':url_for('api.hospital_info_for_anony',user_id=self.anony_user_id)}
+
+        }
+        return data
+    def from_dict(self,user_id,username=None,conversation_no=None,new_chat=False,data=None,anony=False):
         if new_chat:
             message = chat()
             self.created_at = datetime.now()
@@ -241,31 +256,31 @@ class Conversation(PaginatedAPIMixin,db.Model):
                 dict_response = information.return_information()
             
             # Information message
-            if dict_response:
-                self.info_hospital = repr(dict_response)
-                try:
-                    if 'FirstAid_searchwords' in dict_response.keys():
-                        search_keywords = dict_response['FirstAid_searchwords']
-                    elif dict_response['Situation'] == 'non medical related condition':
-                        search_keywords=None
-                    elif 'FirstAid_searchwords' not in dict_response.keys():
-                        search_keywords=None
-                except JSONDecodeError:
-                    search_keywords = None
-                if search_keywords:
-                    returned_link = [return_url(keyword) for keyword in search_keywords]
-                    print('info2',returned_link)
-                    if all(returned_link) is False:
-                        self.youtube_link = None
-                    elif any(returned_link) is False:
-                        returned_link_temp = {repr(i) for i in returned_link if i is not False}
-                        returned_link = [eval(i) for i in returned_link_temp]
-                        self.youtube_link = repr(returned_link)
-                    else:
-                        returned_link_temp = {repr(i) for i in returned_link}
-                        returned_link = [eval(i) for i in returned_link_temp]
-                        self.youtube_link = repr(returned_link)
-                    self.is_dict_done = True
+                if dict_response:
+                    self.info_hospital = repr(dict_response)
+                    try:
+                        if 'FirstAid_searchwords' in dict_response.keys():
+                            search_keywords = dict_response['FirstAid_searchwords']
+                        elif dict_response['Situation'] == 'non medical related condition':
+                            search_keywords=None
+                        elif 'FirstAid_searchwords' not in dict_response.keys():
+                            search_keywords=None
+                    except JSONDecodeError:
+                        search_keywords = None
+                    if search_keywords:
+                        returned_link = [return_url(keyword) for keyword in search_keywords]
+                        print('info2',returned_link)
+                        if all(returned_link) is False:
+                            self.youtube_link = None
+                        elif any(returned_link) is False:
+                            returned_link_temp = {repr(i) for i in returned_link if i is not False}
+                            returned_link = [eval(i) for i in returned_link_temp]
+                            self.youtube_link = repr(returned_link)
+                        else:
+                            returned_link_temp = {repr(i) for i in returned_link}
+                            returned_link = [eval(i) for i in returned_link_temp]
+                            self.youtube_link = repr(returned_link)
+                        self.is_dict_done = True
             self.message = message.return_all_message()
             self.modified_at = datetime.now()
     def check_length(self):

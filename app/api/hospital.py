@@ -18,17 +18,19 @@ def hospital_info_for_anony(user_id):
     return jsonify(hospital_info)
 
 
-@bp.route('/user/<int:id>/hospital',methods=['GET'])
+@bp.route('/users/<int:id>/hospital/<int:conv_id>',methods=['GET'])
 @token_auth.login_required
-def hospital_info_for_user(id):
+def hospital_info_for_user(id,conv_id):
     if token_auth.current_user().id!=id:
         abort(403)
-    hospital_info = Conversation.query.filter_by(user_id=id).first().to_hospital_dict()
+    hospital_info = Conversation.query.filter_by(user_id=id,conversation_no=conv_id).first().to_hospital_dict()
     if hospital_info is None:
         return jsonify({'message':None})
     user_info = User.query.get_or_404(id).to_dict()
     if '_links' in user_info:
         user_info.pop('_links')
+    if 'Refferal' in user_info:
+        user_info.pop('Refferal')
     #user_info['username'] = 'Anonymous
     
     hospital_info.update(user_info)
