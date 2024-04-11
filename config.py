@@ -13,7 +13,7 @@ class Config(object):
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     ADMINS = ['abdul.a.rasheed2022@gmail.com']
     CHAT_PER_PAGE = 5
-    GEMINI_API_KEY = os.getenv('GEMINI_API_KEY')
+    GEMINI_API_KEY = os.getenv('GEMINI_API_KEY') or os.environ.get('SECRET_KEY')
     LOG_WITH_GUNICORN = os.getenv('LOG_WITH_GUNICORN', default=False)
-    YOUTUBE_API_KEY = os.getenv('YOUTUBE_API_KEY')
+    YOUTUBE_API_KEY = os.getenv('YOUTUBE_API_KEY') or os.environ.get('SECRET_KEY')
     
