@@ -71,3 +71,4 @@ Traceback (most recent call last):
        ^^^^^^^^^^^^^
 UnboundLocalError: cannot access local variable 'dict_response' where it is not associated with a value
 2024-04-11 06:54:25,890 INFO: hub_startup [in /home/py_sama/medic_ai/app/__init__.py : 53]
+2024-04-11 08:16:51,269 INFO: hub_startup [in /home/py_sama/medic_ai/app/__init__.py : 53]

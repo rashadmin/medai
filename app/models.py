@@ -14,8 +14,8 @@ import json
 import google.generativeai as genai
 import base64
 
-genai.configure(api_key=current_app.config["GEMINI_API_KEY"])
-model = genai.GenerativeModel('gemini-pro')
+
+
 
 class Age_Class(enum.Enum):
     baby = 'Baby',
@@ -285,6 +285,8 @@ class Conversation(PaginatedAPIMixin,db.Model):
             self.message = message.return_all_message()
             self.modified_at = datetime.now()
     def check_length(self):
+        genai.configure(api_key=current_app.config["GEMINI_API_KEY"])
+        model = genai.GenerativeModel('gemini-pro')
         return model.count_tokens(json.loads(self.message)).total_tokens
     def to_hospital_dict(self):
         if self.info_hospital:

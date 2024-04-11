@@ -29,7 +29,6 @@ def create_app(config_class=Config):
         app.register_blueprint(chat_bp)
         from app.videos import bp as videos_bp
         app.register_blueprint(videos_bp)
-        app.register_blueprint(app.models)
 
     engine = sa.create_engine(app.config['SQLALCHEMY_DATABASE_URI'])
     inspector = sa.inspect(engine)
